@@ -107,12 +107,10 @@ typedef struct builtin
 	int (*func)(info_t *);
 	char *type;
 } builtin_table;
-
 {
 	int (*func)(info_t *);
 	char *type;
 } builtin_table;
-
 
 /* toem_kshlloop.c */
 int ksh(info_t *, char **);
@@ -172,7 +170,7 @@ int btfree(void **);
 
 /* toem_atoi.c */
 int _atoi(char *);
-int _isalpha(int);
+int _ksalpha(int);
 int ks_delim(char, char *);
 int interactive(info_t *);
 
