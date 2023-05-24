@@ -1,6 +1,26 @@
 #include "shell.h"
 
 /**
+ * read_buf - reads a buffer
+ * @info: first parameter
+ * @buf: second parameter
+ * @i: third parameter
+ *
+ * Return: x
+ */
+ssize_t read_buf(info_t *info, char *buf, size_t *i)
+{
+	ssize_t x = 0;
+
+	if (*i)
+		return (0);
+	x = read(info->readfd, buf, READ_BUF_SIZE);
+	if (x >= 0)
+		*i = x;
+	return (x);
+}
+
+/**
  * _getline - gets input line from STDIN
  * @info: first parameter
  * @ptr: second parameter
@@ -61,9 +81,8 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 	ssize_t r = 0;
 	size_t len_p = 0;
 
-	if (!*len) /* if nothing left in the buffer, fill it */
+	if (!*len)
 	{
-		/*bfree((void **)info->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
@@ -74,13 +93,12 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 		{
 			if ((*buf)[r - 1] == '\n')
 			{
-				(*buf)[r - 1] = '\0'; /* remove trailing newline */
+				(*buf)[r - 1] = '\0';
 				r--;
 			}
 			info->linecount_flag = 1;
 			remove_comments(*buf);
 			build_history_list(info, *buf, info->histcount++);
-			/* if (_strchr(*buf, ';')) is this a command chain? */
 			{
 				*len = r;
 				info->cmd_buf = buf;
@@ -116,7 +134,7 @@ ssize_t get_input(info_t *info)
 		check_chain(info, buf, &y, x, len);
 		while (y < len)
 		{
-			if (is_chain(info, buf, &y))
+			if (ks_chain(info, buf, &y))
 				break;
 			y++;
 		}
@@ -136,25 +154,7 @@ ssize_t get_input(info_t *info)
 	return (r);
 }
 
-/**
- * read_buf - reads a buffer
- * @info: first parameter
- * @buf: second parameter
- * @i: third parameter
- *
- * Return: x
- */
-ssize_t read_buf(info_t *info, char *buf, size_t *i)
-{
-	ssize_t x = 0;
 
-	if (*i)
-		return (0);
-	r = read(info->readfd, buf, READ_BUF_SIZE);
-	if (x >= 0)
-		*i = x;
-	return (x);
-}
 
 /**
  * sigintHandler - function blocks ctrl-C
