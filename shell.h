@@ -12,7 +12,7 @@
 #include <limits.h>
 #include <errno.h>
 
-/* read/write buffers */
+/* rdwri buffers */
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
 #define BUF_FLUSH -1
@@ -27,7 +27,7 @@
 #define CONVERT_LOWERCASE       1
 #define CONVERT_UNSIGNED        2
 
-/* using system getline() */
+/* system getline() */
 #define USE_GETLINE     0
 #define USE_STRTOK      0
 #define HIST_FILE       ".simple_shell_history"
@@ -89,8 +89,8 @@ typedef struct passinfo
 	list_t *alias;
 	list_t *env;
 	list_t *history;
-	int cmd_buf_type; /* CMD_types ||, &&, ; */
-	char **cmd_buf; /* pointers to cmd ; chain buffer, for memory mangement */
+	int cmd_buf_type; /* for CMD_types */
+	char **cmd_buf; /* cmd ; chain buffer, for memory mangement pointers */
 } info_t;
 
 #define INFO_INIT \
@@ -108,13 +108,13 @@ typedef struct builtin
 	char *type;
 } builtin_table;
 
-/* toem_kshlloop.c */
+/* kshlloop.c */
 int ksh(info_t *, char **);
 int find_builtin(info_t *);
 void fork_cmd(info_t *);
 void find_cmd(info_t *);
 
-/* toem_parser.c */
+/* parser.c */
 int ks_cmd(info_t *, char *);
 char *dup_chars(char *, int, int);
 char *find_path(info_t *, char *, char *);
@@ -122,107 +122,107 @@ char *find_path(info_t *, char *, char *);
 /* loopksh.c */
 int loopksh(char **);
 
-/* toem_errors_0.c */
+/* errors_0.c */
 int _putfd(char c, int fd);
 int _eputchar(char);
 int _putsfd(char *str, int fd);
 void _eputs(char *);
 
-/* toem_errors_1.c */
+/* errors_1.c */
 int _erratoi(char *);
 int print_z(int, int);
 char *convert_number(long int, int, int);
 void print_error(info_t *, char *);
 void remove_comments(char *);
 
-/* toem_string_0.c */
+/* string_0.c */
 int _strcmp(char *, char *);
 int _strlen(char *);
 char *starts_with(const char *, const char *);
 char *_strcat(char *, char *);
 
-/* toem_string_1.c */
+/* string_1.c */
 int _putchar(char);
 char *_strdup(const char *);
 char *_strcpy(char *, char *);
 void _puts(char *);
 
-/* toem_exits.c */
+/* end.c */
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 char *_strncpy(char *, char *, int);
 
-/* toem_tokn.c */
+/* tokn.c */
 char **strtow2(char *, char);
 char **strtow(char *, char *);
 
-/* toem_realloc.c */
+/* realloc.c */
 char *_memset(char *, char, unsigned int);
 void *_realloc(void *, unsigned int, unsigned int);
 void ffree(char **);
 
-/* toem_memory.c */
+/* memory.c */
 int btfree(void **);
 
-/* toem_atoi.c */
+/* atoi.c */
 int _atoi(char *);
 int _ksalpha(int);
 int ks_delim(char, char *);
 int interactive(info_t *);
 
-/* toem_builtin_0.c */
+/* builtin_0.c */
 int _kshhelp(info_t *);
 int _kshcd(info_t *);
 int _kshexit(info_t *);
 
-/* toem_builtin_1.c */
+/* builtin_1.c */
 int _kshhistory(info_t *);
 int _kshalias(info_t *);
 
-/*toem_getline.c */
+/* getline.c */
 int _getline(info_t *, char **, size_t *);
 ssize_t get_input(info_t *);
 void sigintHandler(int);
 
-/* toem_getinfo.c */
+/* getinfo.c */
 void set_info(info_t *, char **);
 void free_info(info_t *, int);
 void clear_info(info_t *);
 
-/* toem_environ.c */
+/* environ.c */
 int _kshenv(info_t *);
 char *_getenv(info_t *, const char *);
 int _kshunsetenv(info_t *);
 int _kshsetenv(info_t *);
 int populate_env_list(info_t *);
 
-/* toem_getenv.c */
+/* getenv.c */
 int _unsetenv(info_t *, char *);
 int _setenv(info_t *, char *, char *);
 char **get_environ(info_t *);
 
-/* toem_history.c */
+/* history.c */
 int build_history_list(info_t *info, char *buf, int linecount);
 int read_history(info_t *info);
 int write_history(info_t *info);
 int renumber_history(info_t *info);
 char *get_history_file(info_t *info);
 
-/* toem_lists_0.c */
+/* lists_0.c */
 int delete_node_at_index(list_t **, unsigned int);
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
 size_t print_list_str(const list_t *);
 void free_list(list_t **);
 
-/* toem_lists_1.c */
+/* lists_1.c */
 char **list_to_strings(list_t *);
 size_t print_list(const list_t *);
 ssize_t get_node_index(list_t *, list_t *);
 size_t list_len(const list_t *);
 list_t *node_starts_with(list_t *, char *, char);
 
-/* toem_vars.c */
+/* vars.c */
 int replace_alias(info_t *);
 int ks_chain(info_t *, char *, size_t *);
 int replace_string(char **, char *);
