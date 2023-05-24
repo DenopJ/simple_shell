@@ -56,7 +56,7 @@ char **strtow2(char *str, char d)
 
 char **strtow(char *str, char *d)
 {
-	int x, y, q, r,
+	int x, y, q, r;
 	int num = 0;
 	char **a;
 
@@ -65,7 +65,7 @@ char **strtow(char *str, char *d)
 	if (!d)
 		d = " ";
 	for (x = 0; str[x] != '\0'; x++)
-		if (!is_delim(str[x], d) && (is_delim(str[x + 1], d) || !str[x + 1]))
+		if (!ks_delim(str[x], d) && (ks_delim(str[x + 1], d) || !str[x + 1]))
 			num++;
 
 	if (num == 0)
@@ -75,10 +75,10 @@ char **strtow(char *str, char *d)
 		return (NULL);
 	for (x = 0, y = 0; y < num; y++)
 	{
-		while (is_delim(str[x], d))
+		while (ks_delim(str[x], d))
 			x++;
 		q = 0;
-		while (!is_delim(str[x + q], d) && str[x + q])
+		while (!ks_delim(str[x + q], d) && str[x + q])
 			q++;
 		a[y] = malloc((q + 1) * sizeof(char));
 		if (!a[y])
@@ -88,7 +88,7 @@ char **strtow(char *str, char *d)
 			free(a);
 			return (NULL);
 		}
-		for (r = 0; r < k; r++)
+		for (r = 0; r < q; r++)
 			a[y][r] = str[x++];
 		a[y][r] = 0;
 	}
