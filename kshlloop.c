@@ -1,24 +1,23 @@
 #include "shell.h"
-
 /**
- * ksh - main shell loop
- * @info: the parameter and return info struct
- * @av: the argument vector from the main()
+ * ksh - main loop for shell
+ * @info: the parameter ad return info structure
+ * @av: the argument vector from main()
  * Return: 0 on success, 1 on error, or error code
  */
 int ksh(info_t *info, char **av)
 {
-	ssize_t b = 0;
+	ssize_t a = 0;
 	int builtin_ret = 0;
 
-	while (b != -1 && builtin_ret != -2)
+	while (a != -1 && builtin_ret != -2)
 	{
 		clear_info(info);
 		if (interactive(info))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
-		b = get_input(info);
-		if (b != -1)
+		a = get_input(info);
+		if (a != -1)
 		{
 			set_info(info, av);
 			builtin_ret = find_builtin(info);
@@ -43,26 +42,26 @@ int ksh(info_t *info, char **av)
 }
 
 /**
- * find_builtin - finds  builtin commands
- * @info: the parameter the return info struct
- * Return: -1 if builtin not found,
- * 0 if builtin executed successfully,
- * 1 if builtin found but not successful,
- * 2 if builtin signals exit()
+ * fnd_builtin - finds the builtin command
+ * @info: the parameter and return info structure
+ * Return: -1 if builtin is not found,
+ * 0 if builtin is executed successfully,
+ * 1 if builtin found but is not successful,
+ * 2 if builtin signal exit()
  */
 int find_builtin(info_t *info)
 {
 	int a, built_in_ret = -1;
 	builtin_table builtintbl[] = {
-	{"exit", _kshexit},
-	{"env", _kshenv},
-	{"help", _kshhelp},
-	{"history", _kshhistory},
-	{"setenv", _kshsetenv},
-	{"unsetenv", _kshunsetenv},
-	{"cd", _kshcd},
-	{"alias", _kshalias},
-	{NULL, NULL}
+		{"exit", _kshexit},
+		{"env", _kshenv},
+		{"help", _kshhelp},
+		{"history", _kshhistory},
+		{"setenv", _kshsetenv},
+		{"unsetenv", _kshunsetenv},
+		{"cd", _kshcd},
+		{"alias", _kshalias},
+		{NULL, NULL}
 	};
 
 	for (a = 0; builtintbl[a].type; a++)
@@ -76,14 +75,14 @@ int find_builtin(info_t *info)
 }
 
 /**
- * find_cmd - find a command in PATH
- * @info: the parameter and returns info struct
+ * find_cmd - find the command in PATH
+ * @info: the parameter and return info structure
  * Return: void
  */
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
-	int i, k;
+	int a, c;
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
@@ -91,10 +90,10 @@ void find_cmd(info_t *info)
 		info->line_count++;
 		info->linecount_flag = 0;
 	}
-	for (i = 0, k = 0; info->arg[i]; i++)
-		if (!ks_delim(info->arg[i], " \t\n"))
-			k++;
-	if (!k)
+	for (a = 0, c = 0; info->arg[c]; a++)
+		if (!ks_delim(info->arg[a], " \t\n"))
+			c++;
+	if (!c)
 		return;
 
 	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
@@ -107,7 +106,7 @@ void find_cmd(info_t *info)
 	{
 		if ((interactive(info) || _getenv(info, "PATH=")
 					|| info->argv[0][0] == '/') && ks_cmd(info, info->argv[0]))
-				fork_cmd(info);
+			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
@@ -117,15 +116,15 @@ void find_cmd(info_t *info)
 }
 
 /**
- * fork_cmd - forks an exec thread to run cmd
- * @info: the parameter and return info struct
+ * fork_cmd - forks and execute thread to run cmmand
+ * @info: the parameter the return info structure
  * Return: void
  */
 void fork_cmd(info_t *info)
 {
 	pid_t child_pid;
-	child_pid = fork();
 
+	child_pid = fork();
 	if (child_pid == -1)
 	{
 		perror("Error:");
