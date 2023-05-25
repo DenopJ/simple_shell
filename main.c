@@ -4,7 +4,7 @@
  * main - entry point
  * @ac: argument count
  * @av: argument vector
- * Return: 0 on success, 1 on error
+ * Return: Exit on success, 1 on error
  */
 int main(int ac, char **av)
 {
@@ -40,4 +40,4 @@ int main(int ac, char **av)
 	read_history(info);
 	ksh(info, av);
 	return (EXIT_SUCCESS);
-
+}
